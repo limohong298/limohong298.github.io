@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>黑神话：悟空 | 天命人攻略站</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+        }
+
+        /* 全局变量 - 深色主题（默认暗黑神话） */
+        :root {
+            --bg-primary: #0a0806;
+            --bg-secondary: #14110e;
+            --bg-card: #1e1a16;
+            --border: #2a241f;
+            --text-primary: #ece8e0;
+            --text-secondary: #c0b9ae;
+            --accent-gold: #d4af37;
+            --accent-red: #a53f2b;
+            --accent-glow: rgba(212, 175, 55, 0.3);
+            --shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            --btn-hover: #b48c2c;
+            --star-active: #f5b342;
+            --star-inactive: #4a4238;
+        }
+
+        /* 浅色主题 - 水墨淡金 */
+        body.light {
+            --bg-primary: #f3efe7;
+            --bg-secondary: #e8e0d5;
+            --bg-card: #fffaf2;
+            --border: #ddd0bc;
+            --text-primary: #2c241a;
+            --text-secondary: #5e5343;
+            --accent-gold: #b87c2e;
+            --accent-red: #b34e3a;
+            --accent-glow: rgba(184, 124, 46, 0.2);
+            --shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
+            --btn-hover: #9b6424;
+            --star-active: #e09d32;
+            --star-inactive: #d4c5b2;
+        }
+
+        body {
+            font-family: 'Segoe UI', '思源黑体', 'Source Han Sans', 'Noto Sans CJK SC', system-ui, -apple-system, 'Microsoft YaHei', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.5;
+            scroll-behavior: smooth;
+        }
+
+        /* 容器 */
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* 导航栏 */
+        .navbar {
+            background-color: rgba(10, 8, 6, 0.9);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--border);
+        }
+        body.light .navbar {
+            background-color: rgba(243, 239, 231, 0.95);
+        }
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .logo {
+            font-size: 1.7rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, var(--accent-gold), #e6b422);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: 2px;
+        }
+        .logo span {
+            font-size: 1rem;
+            color: var(--accent-red);
+            background: none;
+            -webkit-background-clip: unset;
+            background-clip: unset;
+        }
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+            flex-wrap: wrap;
+        }
+        .nav-links a {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 500;
+            position: relative;
+            padding: 0.2rem 0;
+        }
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent-gold);
+            transition: width 0.2s;
+        }
+        .nav-links a:hover::after, .nav-links a.active::after {
+            width: 100%;
+        }
+        .theme-toggle {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 0.5rem 1rem;
+            border-radius: 40px;
+            cursor: pointer;
+            font-size: 1rem;
+            color: var(--accent-gold);
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+        .theme-toggle:hover {
+            background: var(--accent-gold);
+            color: #1e1a16;
+            border-color: var(--accent-gold);
+        }
+
+        /* 公用部分 */
+        section {
+            padding: 3rem 0;
+        }
+        .section-title {
+            font-size: 2rem;
+            border-left: 5px solid var(--accent-gold);
+            padding-left: 1rem;
+            margin-bottom: 2rem;
+            font-weight: 700;
+        }
+
+        /* 英雄区 */
+        .hero {
+            background: linear-gradient(106deg, rgba(10,8,6,0.8), rgba(30,26,22,0.9)), url('https://picsum.photos/id/104/1600/500?grayscale') center/cover;
+            border-radius: 24px;
+            margin: 1rem 0;
+            padding: 3rem 2rem;
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+        .hero h1 {
+            font-size: 3.2rem;
+            color: var(--accent-gold);
+            text-shadow: 2px 2px 8px black;
+        }
+        .hero p {
+            font-size: 1.2rem;
+            margin-top: 0.8rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .countdown {
+            margin-top: 2rem;
+            background: rgba(0,0,0,0.5);
+            display: inline-block;
+            padding: 0.5rem 2rem;
+            border-radius: 40px;
+            font-size: 1.8rem;
+            font-weight: bold;
+            letter-spacing: 2px;
+            border: 1px solid var(--accent-gold);
+        }
+
+        /* 攻略卡片 & BOSS网格 */
+        .grid-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.8rem;
+            margin-bottom: 2rem;
+        }
+        .card {
+            background: var(--bg-card);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            transition: transform 0.25s ease, box-shadow 0.3s;
+            cursor: pointer;
+        }
+        .card:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow);
+            border-color: var(--accent-gold);
+        }
+        .card-img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            display: block;
+        }
+        .card-content {
+            padding: 1.2rem;
+        }
+        .boss-name {
+            font-size: 1.5rem;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .stars {
+            color: var(--star-active);
+            letter-spacing: 2px;
+        }
+        .badge-phase {
+            background: var(--accent-red);
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            display: inline-block;
+            margin: 0.5rem 0;
+        }
+        .keywords {
+            color: var(--accent-gold);
+            margin: 8px 0;
+            font-size: 0.9rem;
+        }
+        .btn-more {
+            background: none;
+            border: 1px solid var(--accent-gold);
+            padding: 0.4rem 1rem;
+            border-radius: 30px;
+            color: var(--accent-gold);
+            margin-top: 0.8rem;
+            cursor: pointer;
+            transition: 0.2s;
+            font-weight: bold;
+        }
+        .btn-more:hover {
+            background: var(--accent-gold);
+            color: #1e1a16;
+        }
+
+        /* 模态框 */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.85);
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        .modal-content {
+            background: var(--bg-secondary);
+            max-width: 550px;
+            width: 90%;
+            border-radius: 28px;
+            border: 1px solid var(--accent-gold);
+            padding: 1.8rem;
+            position: relative;
+            box-shadow: 0 20px 35px rgba(0,0,0,0.5);
+        }
+        .close-modal {
+            position: absolute;
+            right: 20px;
+            top: 15px;
+            font-size: 28px;
+            cursor: pointer;
+            color: var(--accent-gold);
+        }
+        .modal h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+        .strategy-text {
+            line-height: 1.6;
+            margin-top: 1rem;
+            white-space: pre-line;
+        }
+
+        /* 搜索 + 标签云 */
+        .search-section {
+            margin: 1rem 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+            align-items: center;
+        }
+        #searchInput {
+            flex: 2;
+            min-width: 200px;
+            padding: 12px 20px;
+            border-radius: 40px;
+            border: 1px solid var(--border);
+            background: var(--bg-card);
+            color: var(--text-primary);
+            font-size: 1rem;
+        }
+        .tag-cloud {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .tag {
+            background: var(--bg-card);
+            padding: 5px 14px;
+            border-radius: 30px;
+            border: 1px solid var(--border);
+            font-size: 0.85rem;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .tag:hover, .tag.active-tag {
+            background: var(--accent-gold);
+            color: #0a0806;
+            border-color: var(--accent-gold);
+        }
+
+        /* 最新攻略列表 */
+        .latest-list {
+            background: var(--bg-card);
+            border-radius: 24px;
+            padding: 1.5rem;
+        }
+        .latest-item {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 0;
+        }
+        .latest-item:last-child {
+            border: none;
+        }
+
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .container { padding: 0 16px; }
+            .nav-container { flex-direction: column; align-items: stretch; }
+            .nav-links { justify-content: center; gap: 1.2rem; }
+            .hero h1 { font-size: 2rem; }
+            .countdown { font-size: 1.2rem; }
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            border-top: 1px solid var(--border);
+            margin-top: 2rem;
+            color: var(--text-secondary);
+        }
+
+        button {
+            background: none;
+            border: none;
+        }
+        .active-page {
+            font-weight: bold;
+            color: var(--accent-gold);
+        }
+        .page-content {
+            display: none;
+        }
+        .page-content.active-page-content {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+<div class="navbar">
+    <div class="container nav-container">
+        <div class="logo">黑神话·悟空 <span>天命人攻略</span></div>
+        <ul class="nav-links">
+            <li><a href="#" data-page="home" class="active">首页</a></li>
+            <li><a href="#" data-page="boss">BOSS攻略</a></li>
+            <li><a href="#" data-page="map">地图指引</a></li>
+            <li><a href="#" data-page="story">剧情解读</a></li>
+            <li><a href="#" data-page="gear">装备收集</a></li>
+            <li><a href="#" data-page="bestiary">影神图鉴</a></li>
+        </ul>
+        <button class="theme-toggle" id="themeSwitcher">🌙 暗金神话</button>
+    </div>
+</div>
+
+<main class="container">
+    <!-- 首页内容 -->
+    <div id="homePage" class="page-content active-page-content">
+        <div class="hero">
+            <h1>《黑神话：悟空》</h1>
+            <p>天命人的不羁之路 · 全攻略集结地</p>
+            <div class="countdown" id="countdownBox">已发售 · 传奇启程</div>
+        </div>
+
+        <div class="search-section">
+            <input type="text" id="searchLatest" placeholder="🔍 搜索最新攻略标题..." autocomplete="off">
+            <div class="tag-cloud" id="homeTagCloud">
+                <!-- 热门Boss标签云 动态js生成 -->
+            </div>
+        </div>
+
+        <div class="section-title">📖 最新攻略推荐</div>
+        <div class="latest-list" id="latestList"></div>
+    </div>
+
+    <!-- BOSS攻略页面 -->
+    <div id="bossPage" class="page-content">
+        <div class="section-title">🐉 头目·妖王攻略</div>
+        <div class="search-section">
+            <input type="text" id="bossSearch" placeholder="🔍 过滤BOSS名称...">
+            <div></div>
+        </div>
+        <div id="bossGrid" class="grid-cards"></div>
+    </div>
+
+    <!-- 其他页面静态占位（地图指引/剧情解读等） -->
+    <div id="mapPage" class="page-content">
+        <div class="section-title">🗺️ 六六村·路径图解</div>
+        <div class="card" style="padding:2rem; text-align:center">🌄 浮屠塔 → 黄风岭 → 盘丝洞 → 火焰山路线图即将上线，内含土地庙位置与隐藏传送点。</div>
+    </div>
+    <div id="storyPage" class="page-content">
+        <div class="section-title">📜 未竟之缘 · 剧情深解</div>
+        <div class="card" style="padding:2rem">“悟空身世之谜，花果山与天庭的纠葛，结局四解读：轮回、自由与执念...” 持续更新，挖掘影神图隐藏叙事。</div>
+    </div>
+    <div id="gearPage" class="page-content">
+        <div class="section-title">⚔️ 神珍 · 套装收集</div>
+        <div class="card" style="padding:2rem">【行者套】【金箍棒法】【青铜面具】全收集坐标 + 强化素材掉落表，敬请期待互动地图。</div>
+    </div>
+    <div id="bestiaryPage" class="page-content">
+        <div class="section-title">📖 影神图鉴 · 众生相</div>
+        <div class="card" style="padding:2rem">收录妖怪人物：黑熊精、黄风大圣、蜘蛛精、杨戬等，背景故事与语音残片整理中。</div>
+    </div>
+</main>
+<footer>© 天命人攻略站 — 如是我闻，战无不克 | 以棍扫六合，以心证菩提</footer>
+
+<script>
+    // -------- BOSS数据库 ----------
+    const bosses = [
+        { id:1, name:"牯护卫", phase:"一阶段·蛮牛冲撞", difficulty:3, stars:"★★★☆☆", keywords:"防御反击, 识破", strategy:"牯护卫攻击前摇大，利用重棍积蓄打断冲锋，二阶段怒后注意连续顶撞。建议携带定身术+轻棍连击。", img:"https://picsum.photos/id/131/400/200", alt:"黑风山牯护卫战场" },
+        { id:2, name:"灵虚子", phase:"双阶段·道士狼妖", difficulty:4, stars:"★★★★☆", keywords:"毒雾, 闪身", strategy:"一阶段召唤小狼，快速清怪。二阶段毒雾区域持续伤害，拉开距离使用毫毛分身吸引仇恨，蓄力棍花破防。", img:"https://picsum.photos/id/166/400/200", alt:"灵虚子boss战" },
+        { id:3, name:"黑风大王", phase:"二阶段·黑熊精", difficulty:4, stars:"★★★★☆", keywords:"定身术, 立棍", strategy:"一阶段人形注意三连击+突刺，二阶段化为黑熊后范围拍地，精准闪避后定身术+立棍重击打出硬直。", img:"https://picsum.photos/id/104/400/200", alt:"黑风大王变身黑熊" },
+        { id:4, name:"亢金龙", phase:"雷电飞龙", difficulty:5, stars:"★★★★★", keywords:"雷抗药, 戳棍", strategy:"亢金龙飞天释放雷矛，地面雷圈预警；推荐服用雷抗丹药，使用戳棍上挑击落，破角后处决。", img:"https://picsum.photos/id/212/400/200", alt:"亢金龙之雷劫" },
+        { id:5, name:"黄风怪", phase:"三昧神风", difficulty:5, stars:"★★★★★", keywords:"定风珠, 背刺", strategy:"风沙阶段视野受阻，携带定风珠法宝可破风墙，绕背重击，注意躲避三连沙尘旋风。", img:"https://picsum.photos/id/30/400/200", alt:"黄风滚滚妖气" },
+        { id:6, name:"毒敌大王", phase:"蝎尾毒刺", difficulty:4, stars:"★★★★☆", keywords:"解毒膏, 跳劈", strategy:"毒液持续伤害，保持移动，蝎尾横扫二段判定，看准节奏跳跃或闪避；及时使用解毒膏，铜头铁臂反弹毒针。", img:"https://picsum.photos/id/96/400/200", alt:"毒敌山腐毒之战" }
+    ];
+
+    // 最新攻略列表
+    const latestArticles = [
+        { title: "【开荒必看】0到30级天赋加点顺序", excerpt: "优先点满根基·气力，习得定身咒+毫毛，前期推图效率翻倍。" },
+        { title: "全Boss弱点属性表 & 克制法术推荐", excerpt: "黑风大王怕火，亢金龙惧雷抗，毒敌怕佛法系变身。" },
+        { title: "隐藏地图解锁：旧观音禅院 + 碧水洞", excerpt: "收集三枚佛目珠，在浮屠塔触发隐藏剧情。" },
+        { title: "六根器全收集顺序", excerpt: "眼看喜·耳听怒·鼻嗅爱·舌尝思·身本忧·意见欲。" }
+    ];
+
+    // 热门标签云数据
+    const hotTags = ["黑风大王", "亢金龙", "定身术", "毫毛分身", "毒敌大王", "隐藏结局", "立棍", "戳棍"];
+
+    // 渲染BOSS卡片
+    function renderBossCards(filterText = "") {
+        const grid = document.getElementById("bossGrid");
+        const filtered = bosses.filter(b => b.name.toLowerCase().includes(filterText.toLowerCase()));
+        if(filtered.length === 0){
+            grid.innerHTML = `<div style="grid-column:1/-1; text-align:center;">无匹配BOSS，换个关键字吧</div>`;
+            return;
+        }
+        grid.innerHTML = filtered.map(boss => `
+            <div class="card" data-boss-id="${boss.id}">
+                <img class="card-img" src="${boss.img}" alt="${boss.alt}" loading="lazy">
+                <div class="card-content">
+                    <div class="boss-name">${boss.name} <span class="stars">${boss.stars}</span></div>
+                    <div class="badge-phase">${boss.phase}</div>
+                    <div class="keywords">⚡ 核心：${boss.keywords}</div>
+                    <button class="btn-more" data-id="${boss.id}">📖 查看详细战术</button>
+                </div>
+            </div>
+        `).join("");
+
+        // 绑定模态框事件
+        document.querySelectorAll(".btn-more").forEach(btn => {
+            btn.addEventListener("click", (e) => {
+                e.stopPropagation();
+                const id = parseInt(btn.dataset.id);
+                const boss = bosses.find(b => b.id === id);
+                if(boss) openModal(boss);
+            });
+        });
+    }
+
+    // 模态框逻辑
+    const modal = document.createElement("div");
+    modal.className = "modal";
+    modal.innerHTML = `<div class="modal-content"><span class="close-modal">&times;</span><h3 id="modalTitle"></h3><div class="strategy-text" id="modalText"></div></div>`;
+    document.body.appendChild(modal);
+    const closeModalBtn = modal.querySelector(".close-modal");
+    function openModal(boss) {
+        document.getElementById("modalTitle").innerText = `${boss.name} · 制胜攻略`;
+        document.getElementById("modalText").innerHTML = `<strong>阶段：</strong>${boss.phase}<br><strong>核心打法：</strong> ${boss.keywords}<br><br>📌 详细战术：${boss.strategy}<br><br>💡 小提示：熟悉BOSS抬手动作，善用变身化解致命伤害。`;
+        modal.style.display = "flex";
+    }
+    closeModalBtn.onclick = () => modal.style.display = "none";
+    modal.onclick = (e) => { if(e.target === modal) modal.style.display = "none"; };
+
+    // 最新攻略列表渲染
+    function renderLatestList(searchTerm=""){
+        const container = document.getElementById("latestList");
+        const filteredArts = latestArticles.filter(art => art.title.toLowerCase().includes(searchTerm.toLowerCase()));
+        if(filteredArts.length === 0) {
+            container.innerHTML = "<div class='latest-item'>暂无攻略匹配</div>";
+            return;
+        }
+        container.innerHTML = filteredArts.map(art => `
+            <div class="latest-item">
+                <strong>📌 ${art.title}</strong>
+                <span style="color:var(--accent-gold);">${art.excerpt.substring(0,60)}...</span>
+            </div>
+        `).join("");
+    }
+
+    // 首页标签云渲染
+    function renderTagCloud(){
+        const cloudDiv = document.getElementById("homeTagCloud");
+        cloudDiv.innerHTML = hotTags.map(tag => `<div class="tag" data-tag="${tag}">${tag}</div>`).join("");
+        document.querySelectorAll("#homeTagCloud .tag").forEach(tagEl => {
+            tagEl.addEventListener("click", (e) => {
+                const tagName = tagEl.dataset.tag;
+                document.getElementById("searchLatest").value = tagName;
+                renderLatestList(tagName);
+            });
+        });
+    }
+
+    // 倒计时（改为已发售展示徽章 或 倒计时演示? 游戏2024已发售，但演示“已发售”徽章效果）
+    const countdownDiv = document.getElementById("countdownBox");
+    const releaseDate = new Date(2024, 7, 20); // 2024年8月20日发售
+    const now = new Date();
+    if(now > releaseDate) {
+        countdownDiv.innerHTML = "🎉 现已发售 · 天命集结 🎉";
+        countdownDiv.style.background = "var(--accent-red)";
+    } else {
+        let diff = releaseDate - now;
+        let days = Math.floor(diff / (1000*60*60*24));
+        countdownDiv.innerHTML = `⏳ 距发售 ${days} 天 ⏳`;
+    }
+
+    // 深色/浅色切换
+    const themeBtn = document.getElementById("themeSwitcher");
+    themeBtn.addEventListener("click", () => {
+        document.body.classList.toggle("light");
+        const isLight = document.body.classList.contains("light");
+        themeBtn.innerHTML = isLight ? "🌕 水墨暗金" : "🌙 暗金神话";
+    });
+
+    // 页面导航
+    const pages = ["home", "boss", "map", "story", "gear", "bestiary"];
+    const pageElements = {
+        home: document.getElementById("homePage"),
+        boss: document.getElementById("bossPage"),
+        map: document.getElementById("mapPage"),
+        story: document.getElementById("storyPage"),
+        gear: document.getElementById("gearPage"),
+        bestiary: document.getElementById("bestiaryPage")
+    };
+    function switchPage(pageId){
+        for(let p of pages){
+            pageElements[p].classList.remove("active-page-content");
+            document.querySelector(`.nav-links a[data-page="${p}"]`).classList.remove("active-page");
+        }
+        pageElements[pageId].classList.add("active-page-content");
+        document.querySelector(`.nav-links a[data-page="${pageId}"]`).classList.add("active-page");
+        if(pageId === "boss") renderBossCards(document.getElementById("bossSearch")?.value || "");
+        if(pageId === "home") renderLatestList(document.getElementById("searchLatest")?.value || "");
+    }
+    document.querySelectorAll(".nav-links a").forEach(link => {
+        link.addEventListener("click", (e) => {
+            e.preventDefault();
+            const page = link.dataset.page;
+            switchPage(page);
+        });
+    });
+
+    // boss页搜索过滤
+    const bossSearchInput = document.getElementById("bossSearch");
+    if(bossSearchInput) {
+        bossSearchInput.addEventListener("input", (e) => {
+            if(pageElements.boss.classList.contains("active-page-content")){
+                renderBossCards(e.target.value);
+            }
+        });
+    }
+    // 首页搜索过滤
+    const latestSearch = document.getElementById("searchLatest");
+    if(latestSearch){
+        latestSearch.addEventListener("input", (e) => {
+            if(pageElements.home.classList.contains("active-page-content")){
+                renderLatestList(e.target.value);
+            }
+        });
+    }
+
+    // 初始渲染 首页&BOSS
+    renderLatestList("");
+    renderTagCloud();
+    renderBossCards("");
+    // 初始设定主题及激活首页
+    if(!document.body.classList.contains("light")){
+        themeBtn.innerHTML = "🌙 暗金神话";
+    }
+    // 预置BOSS页面点击卡片整体也可查看详情? 增加卡片点击事件
+    document.addEventListener("click", (e) => {
+        const bossCard = e.target.closest(".card");
+        if(bossCard && bossCard.dataset.bossId && pageElements.boss.classList.contains("active-page-content")){
+            const id = parseInt(bossCard.dataset.bossId);
+            const boss = bosses.find(b => b.id === id);
+            if(boss) openModal(boss);
+        }
+    });
+</script>
+</body>
+</html>
