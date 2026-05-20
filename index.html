@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>贪吃蛇</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #1a1a1a;
+            margin: 0;
+            height: 100vh;
+        }
+        canvas {
+            background: #000;
+            border: 2px solid #fff;
+        }
+    </style>
+</head>
+<body>
+<canvas id="game" width="300" height="500"></canvas>
+
+<script>
+let canvas = document.getElementById("game");
+let ctx = canvas.getContext("2d");
+let grid = 10;
+let snake = [{x:150, y:250}];
+let dx = grid;
+let dy = 0;
+let food = {};
+let gameOver = false;
+
+function randomFood() {
+    food.x = Math.floor(Math.random() * canvas.width / grid) * grid;
+    food.y = Math.floor(Math.random() * canvas.height / grid) * grid;
+}
+randomFood();
+
+document.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowLeft" && dx !== grid) {dx = -grid; dy = 0;}
+    if (e.key === "ArrowRight" && dx !== -grid) {dx = grid; dy = 0;}
+    if (e.key === "ArrowUp" && dy !== grid) {dy = -grid; dx = 0;}
+    if (e.key === "ArrowDown" && dy !== -grid) {dy = grid; dx = 0;}
+});
+
+function draw() {
+    if (gameOver) return;
+    ctx.fillStyle = "#000";
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+
+    ctx.fillStyle = "#0f0";
+    snake.forEach(part => {
+        ctx.fillRect(part.x, part.y, grid, grid);
+    });
+
+    ctx.fillStyle = "#f00";
+    ctx.fillRect(food.x, food.y, grid, grid);
+
+    let head = {x: snake[0].x + dx, y: snake[0].y + dy};
+    snake.unshift(head);
+
+    if (head.x === food.x && head.y === food.y) {
+        randomFood();
+    } else {
+        snake.pop();
+    }
+
+    if (head.x < 0 || head.x >= canvas.width || head.y <0 || head.y >= canvas.height) {
+        gameOver = true;
+        alert("游戏结束！");
+    }
+}
+
+setInterval(draw, 100);
+</script>
+</body>
+</html>
